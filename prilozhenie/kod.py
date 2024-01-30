@@ -10,7 +10,8 @@ from flet import (ElevatedButton,
                   RadioGroup,
                   Radio,
                   DataTable,
-                  ControlEvent)
+                  ControlEvent,
+                  DataColumn)
 from simpledt import DataFrame
 
 
@@ -21,6 +22,13 @@ def main(page: Page):
         data_frame = DataFrame(data)  
         table.rows = data_frame.datatable.rows
         table.columns = data_frame.datatable.columns
+        table.columns[0].label = Text("")
+        table.columns[1].label = Text("")
+        table.columns[2].label = Text("")
+        table.columns[3].label = Text("")
+        table.columns[4].label = Text("")
+        table.columns[5].label = Text("")
+        table.columns = data_frame.datatable.columns[:3]
         table.update()
         
     def setDates(path : str):
@@ -58,12 +66,11 @@ def main(page: Page):
     table = DataTable()
 
 
-
     page.add(get_directory_dialog)
     page.add(Row([ElevatedButton("Открыть папку с файлами", on_click=lambda _: get_directory_dialog.get_directory_path()), directory_path]))
     page.add(dates)
     page.add(table)
 
-    
+    page.scroll = "auto"
     page.update()
 flet.app(target=main)
