@@ -10,25 +10,16 @@ from flet import (ElevatedButton,
                   RadioGroup,
                   Radio,
                   DataTable,
-                  ControlEvent,
-                  DataColumn)
-from simpledt import DataFrame
+                  ControlEvent)
 
 
 def main(page: Page):
 
     def setTable(e : ControlEvent):
         data = pd.read_excel(e.data)
-        data_frame = DataFrame(data)  
-        table.rows = data_frame.datatable.rows
-        table.columns = data_frame.datatable.columns
-        table.columns[0].label = Text("")
-        table.columns[1].label = Text("")
-        table.columns[2].label = Text("")
-        table.columns[3].label = Text("")
-        table.columns[4].label = Text("")
-        table.columns[5].label = Text("")
-        table.columns = data_frame.datatable.columns[:3]
+        df=pd.DataFrame(data)
+        print(df.columns)
+        df[['Журнал посещений - 04.12.2023','Unnamed: 2','Unnamed: 4']]
         table.update()
         
     def setDates(path : str):
@@ -62,8 +53,8 @@ def main(page: Page):
 
     get_directory_dialog = FilePicker(on_result=get_directory_result)
     directory_path = Text()
-    dates = RadioGroup(content=Row())
-    table = DataTable()
+    dates=RadioGroup(content=Row())
+    table=DataTable()
 
 
     page.add(get_directory_dialog)
