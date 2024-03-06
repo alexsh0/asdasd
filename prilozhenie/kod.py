@@ -1,7 +1,7 @@
 import os
-import flet
+import flet as ft
 import pandas as pd
-from flet import (ElevatedButton,
+from flet import(ElevatedButton,
                   FilePicker,
                   FilePickerResultEvent,
                   Page,
@@ -16,12 +16,26 @@ from flet import (ElevatedButton,
 def main(page: Page):
 
     def setTable(e : ControlEvent):
-        data = pd.read_excel(e.data)
-        df=pd.DataFrame(data)
-        print(df.columns)
-        df.rename(columns = {'Журнал посещений - 04.12.2023':'Дата и Время','Unnamed: 2':'ФИО','Unnamed: 4':'Работник ОО, сделавший отметку'},inplace = True)
-        print(df[['Дата и Время','ФИО','Способ входа']].loc[1:])
-        table.update()
+        dirname = os.path.dirname(__file__)
+        filename = os.path.join(dirname, 'таблицы')
+        files = [f for f in os.listdir(filename) if f.endswith('.xlsx')]
+
+        data = pd.DataFrame()
+
+        for file in files:
+            df = pd.read_excel(os.path.join(filename, file))[1:]
+            df = df.drop(columns = ['Unnamed: 3','Unnamed: 4','Unnamed: 5'])
+            df.columns = ['Date','Class','FIO']
+            df = df.dropna()
+            data = pd.concat([data, df])
+
+        data = data.reset_index(drop=True)
+        data_columns=df.columns
+
+    
+        
+        page.add(DataTable(columns=ft.DataColumn(Text(data_columns))))
+
         
     def setDates(path : str):
         files_buttons = []
@@ -30,7 +44,7 @@ def main(page: Page):
             if file.endswith(".xlsx"):
                 file_path = os.path.join(path, file)
                 file_name = os.path.splitext(file)[0]
-                mdf=
+                
 
                 
                 files_buttons.append(Radio(value=file_path, label=file_name))
@@ -61,10 +75,10 @@ def main(page: Page):
 
 
     page.add(get_directory_dialog)
-    page.add(Row([ElevatedButton("Открыть папку с файлами", on_click=lambda _: get_directory_dialog.get_directory_path()), directory_path]))
+    page.add(Row([ElevatedButton("Обновить таблицу", on_click=setTable)]))
     page.add(dates)
     page.add(table)
 
     page.scroll = "auto"
     page.update()
-flet.app(target=main)
+ft.app(target=main)
