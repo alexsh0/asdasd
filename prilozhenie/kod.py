@@ -19,7 +19,8 @@ def main(page: Page):
         data = pd.read_excel(e.data)
         df=pd.DataFrame(data)
         print(df.columns)
-        df[['Журнал посещений - 04.12.2023','Unnamed: 2','Unnamed: 4']]
+        df.rename(columns = {'Журнал посещений - 04.12.2023':'Дата и Время','Unnamed: 2':'ФИО','Unnamed: 4':'Работник ОО, сделавший отметку'},inplace = True)
+        print(df[['Дата и Время','ФИО','Способ входа']].loc[1:])
         table.update()
         
     def setDates(path : str):
@@ -29,6 +30,8 @@ def main(page: Page):
             if file.endswith(".xlsx"):
                 file_path = os.path.join(path, file)
                 file_name = os.path.splitext(file)[0]
+                mdf=
+
                 
                 files_buttons.append(Radio(value=file_path, label=file_name))
                 
