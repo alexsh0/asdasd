@@ -16,6 +16,7 @@ from flet import(ElevatedButton,
 def main(page: Page):
 
     def setTable(e : ControlEvent):
+
         dirname = os.path.dirname(__file__)
         filename = os.path.join(dirname, 'таблицы')
         files = [f for f in os.listdir(filename) if f.endswith('.xlsx')]
@@ -26,15 +27,23 @@ def main(page: Page):
             df = pd.read_excel(os.path.join(filename, file))[1:]
             df = df.drop(columns = ['Unnamed: 3','Unnamed: 4','Unnamed: 5'])
             df.columns = ['Date','Class','FIO']
-            df = df.dropna()
+
             data = pd.concat([data, df])
 
         data = data.reset_index(drop=True)
-        data_columns=df.columns
 
-    
+
+
+        for i in range(len(df.columns)):
+            list(df.columns)[i] = Text(f"{i}")
+
+             
+
         
-        page.add(DataTable(columns=ft.DataColumn(Text(data_columns))))
+        #for i in range(len(df.rows)):
+        #    for j in range(df.rows[i].cells):
+        #        df.rows[i].cells[j].content = Text(f"{i}/{j}")
+        #table.rows = df.rows
 
         
     def setDates(path : str):
@@ -76,8 +85,7 @@ def main(page: Page):
 
     page.add(get_directory_dialog)
     page.add(Row([ElevatedButton("Обновить таблицу", on_click=setTable)]))
-    page.add(dates)
-    page.add(table)
+
 
     page.scroll = "auto"
     page.update()
