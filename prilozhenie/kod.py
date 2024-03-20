@@ -81,15 +81,13 @@ def main(page: Page):
     directory_path = Text()
     dates=RadioGroup(content=Row())
     table=DataTable()
+    list1=ft.ExpansionPanelList(controls=[ft.ExpansionPanel(bgcolor=ft.colors.BLUE_50)],elevation=0,width=300)
+    list2=ft.ExpansionPanelList(controls=[ft.ExpansionPanel(bgcolor=ft.colors.BLUE_50)],elevation=0,width=300)
 
 
     page.add(get_directory_dialog)
-    page.add(ft.Container(
-        content = ft.ExpansionPanelList(controls=[ft.ExpansionPanel(bgcolor=ft.colors.BLUE_50)],elevation=0,width=300,Text="Список классов"),
-        alignment=ft.alignment.top_right))
-    page.add(ft.Container(
-        content = ElevatedButton("Обновить таблицу", on_click=setTable),
-        alignment=ft.alignment.top_left))
+    page.add(ft.Container(content = ElevatedButton("Обновить таблицу", on_click=setTable),alignment=ft.alignment.top_left))
+    page.add(Row([list1,list2]))
     
     
 
