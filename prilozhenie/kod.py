@@ -34,8 +34,8 @@ def main(page: Page):
 
 
 
-        for i in range(len(df.columns)):
-            list(df.columns)[i] = Text(f"{i}")
+        #for i in range(len(df.columns)):
+        #    list(df.columns)[i] = Text(f"{i}")
 
              
 
@@ -84,7 +84,14 @@ def main(page: Page):
 
 
     page.add(get_directory_dialog)
-    page.add(Row([ElevatedButton("Обновить таблицу", on_click=setTable)]))
+    page.add(ft.Container(
+        content = ft.ExpansionPanelList(controls=[ft.ExpansionPanel(bgcolor=ft.colors.BLUE_50)],elevation=0,width=300,Text="Список классов"),
+        alignment=ft.alignment.top_right))
+    page.add(ft.Container(
+        content = ElevatedButton("Обновить таблицу", on_click=setTable),
+        alignment=ft.alignment.top_left))
+    
+    
 
 
     page.scroll = "auto"
