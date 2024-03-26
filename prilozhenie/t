@@ -1,68 +1,20 @@
-import os
-import flet
-import pandas as pd
-from flet import (ElevatedButton,
-                  FilePicker,
-                  FilePickerResultEvent,
-                  Page,
-                  Row,
-                  Text,
-                  RadioGroup,
-                  Radio,
-                  DataTable,
-                  ControlEvent)
-
-
-def main(page: Page):
-
-    def setTable(e : ControlEvent):
-        data = pd.read_excel(e.data)
-        df=pd.DataFrame(data)
-
-        #print(df.columns)
-        #df.rename(columns = {'Журнал посещений - 04.12.2023':'Дата и Время','Unnamed: 2':'ФИО','Unnamed: 4':'Работник ОО, сделавший отметку'},inplace = True)
-
-        #print(df[['Дата и Время','ФИО','Способ входа']].loc[1:])
-        print(df)
+for i in range(len(df.columns)):
+            df.columns[i].label = Text(f"{i}")
+        
+        len_r = len(df.rows)
+        for i in range(len_r):
+            len_c = len(df.rows[i].cells)
+            for j in range(len_c):
+                df.rows[i].cells[j].content = Text(f"{i}/{j}")
+        
+        table.rows = df.rows
+        table.columns = df.columns
+        
         table.update()
         
-    def setDates(path : str):
-        files_buttons = []
-        
-        for file in os.listdir(path):
-            if file.endswith(".xlsx"):
-                file_path = os.path.join(path, file)
-                file_name = os.path.splitext(file)[0]
-                
-
-                
-                files_buttons.append(Radio(value=file_path, label=file_name))
-                
-        dates.content = Row(files_buttons)
-        dates.on_change = setTable
-        dates.update()
-        
-    def get_directory_result(e: FilePickerResultEvent):               
-        dirname = os.path.dirname(__file__)
-        path = os.path.join(dirname, 'таблицы')
-        files = [f for f in os.listdir(path) if f.endswith('.xlsx')]
-        data = pd.DataFrame()
-        for file in files:
-            df = pd.read_excel(os.path.join(path, file))
-            data = pd.concat([data, df])
-        data.to_excel('merged_file.xlsx', index=False)
-        table.update()
-
-
-    directory_path = Text()
-    dates=RadioGroup(content=Row())
-    table=DataTable()
-
-
-    page.add(Row([ElevatedButton("Открыть папку с файлами", on_click=lambda _: get_directory_dialog.get_directory_path()), directory_path]))
-    page.add(dates)
-    page.add(table)
-
-    page.scroll = "auto"
-    page.update()
-flet.app(target=main)
+        #for i in range(len(df.columns)):
+        #    list(df.columns)[i] = Text(f"{i}")
+        #for i in range(len(df.rows)):
+        #    for j in range(df.rows[i].cells):
+        #        df.rows[i].cells[j].content = Text(f"{i}/{j}")
+        #table.rows = df.rows

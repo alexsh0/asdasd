@@ -29,21 +29,9 @@ def main(page: Page):
             df.columns = ['Date','Class','FIO']
 
             data = pd.concat([data, df])
-
-        data = data.reset_index(drop=True)
-
-
-
-        #for i in range(len(df.columns)):
-        #    list(df.columns)[i] = Text(f"{i}")
-
-             
+            
 
         
-        #for i in range(len(df.rows)):
-        #    for j in range(df.rows[i].cells):
-        #        df.rows[i].cells[j].content = Text(f"{i}/{j}")
-        #table.rows = df.rows
 
         
     def setDates(path : str):
@@ -81,13 +69,15 @@ def main(page: Page):
     directory_path = Text()
     dates=RadioGroup(content=Row())
     table=DataTable()
-    list1=ft.ExpansionPanelList(controls=[ft.ExpansionPanel(bgcolor=ft.colors.BLUE_50)],elevation=0,width=300)
-    list2=ft.ExpansionPanelList(controls=[ft.ExpansionPanel(bgcolor=ft.colors.BLUE_50)],elevation=0,width=300)
-
 
     page.add(get_directory_dialog)
-    page.add(ft.Container(content = ElevatedButton("Обновить таблицу", on_click=setTable),alignment=ft.alignment.top_left))
-    page.add(Row([list1,list2]))
+    page.add(Row([
+        ElevatedButton("Обновить таблицу", on_click=setTable),
+        ElevatedButton("Данные по школе"),
+        ElevatedButton("Данные по классу"),
+        ft.ExpansionTile(title=Text("Список классов"),width=300, controls=[ft.CupertinoButton(content=Text('10И'),width=300)]),
+        ft.ExpansionTile(title=Text("Список учеников"),width=300, controls=[ft.CupertinoButton(content=Text("Алексей Панферов"),width=300)])
+    ]))
     
     
 
