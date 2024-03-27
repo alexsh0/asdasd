@@ -49,6 +49,10 @@ def main(page: Page):
         dates.content = Row(files_buttons)
         dates.on_change = setTable
         dates.update()
+
+
+
+
         
     def get_directory_result(e: FilePickerResultEvent):        
         directory_path.value = e.path
@@ -64,6 +68,22 @@ def main(page: Page):
             table.rows.clear()
             table.columns.clear()
             table.update()
+    
+    def end_drawer_dismissed(e):
+        print("End drawer dismissed!")
+    def show_end_drawer(e):
+        page.show_end_drawer(end_drawer)
+
+    end_drawer = ft.NavigationDrawer(
+        on_dismiss=end_drawer_dismissed,
+        controls=[
+            ft.NavigationDrawerDestination(
+                icon=ft.icons.ADD_TO_HOME_SCREEN_SHARP, label="Item 1"
+            ),
+            ft.NavigationDrawerDestination(icon=ft.icons.ADD_COMMENT, label="Item 2"),
+        ],
+    )
+
 
     get_directory_dialog = FilePicker(on_result=get_directory_result)
     directory_path = Text()
@@ -71,17 +91,16 @@ def main(page: Page):
     table=DataTable()
 
     page.add(get_directory_dialog)
-    page.add(Row([
-        ElevatedButton("Обновить таблицу", on_click=setTable),
-        ElevatedButton("Данные по школе"),
-        ElevatedButton("Данные по классу"),
-        ft.ExpansionTile(title=Text("Список классов"),width=300, controls=[ft.CupertinoButton(content=Text('10И'),width=300)]),
-        ft.ExpansionTile(title=Text("Список учеников"),width=300, controls=[ft.CupertinoButton(content=Text("Алексей Панферов"),width=300)])
-    ]))
+    page.add(ft.ElevatedButton("Show end drawer", on_click=show_end_drawer))
+
+    #page.add(Row([
+        #ft.ExpansionTile(title=Text("Список классов"),width=300, controls=[ft.FilledButton(content=Text('10И'),width=300)]),
+        #ft.ExpansionTile(title=Text("Список учеников"),width=300, controls=[ft.FilledButton(content=Text("Алексей Панферов"),width=300)])]))
     
     
 
 
-    page.scroll = "auto"
+    page.scroll = True
+
     page.update()
 ft.app(target=main)
