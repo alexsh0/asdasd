@@ -27,10 +27,30 @@ def main(page: Page):
             df = pd.read_excel(os.path.join(filename, file))[1:]
             df = df.drop(columns = ['Unnamed: 3','Unnamed: 4','Unnamed: 5'])
             df.columns = ['Date','Class','FIO']
-
+            df = df.dropna()
             data = pd.concat([data, df])
-            
 
+        data = data.reset_index(drop=True)
+        
+    def classes(e : ControlEvent):
+        dirname = os.path.dirname(__file__)
+        filename = os.path.join(dirname, 'таблицы')
+        files = [f for f in os.listdir(filename) if f.endswith('.xlsx')]
+
+        data = pd.DataFrame()
+
+        for file in files:
+            df = pd.read_excel(os.path.join(filename, file))[1:]
+            df = df.drop(columns = ['Unnamed: 3','Unnamed: 4','Unnamed: 5'])
+            df.columns = ['Date','Class','FIO']
+            df = df.drop(columns = ['Date','FIO'])
+            df = df.dropna()
+            data = pd.concat([data, df])
+
+        data = data.reset_index(drop=True)
+        classlist=df.drop_duplicates()
+        return(classlist)
+        
         
 
         
@@ -68,21 +88,6 @@ def main(page: Page):
             table.rows.clear()
             table.columns.clear()
             table.update()
-    
-    def end_drawer_dismissed(e):
-        print("End drawer dismissed!")
-    def show_end_drawer(e):
-        page.show_end_drawer(end_drawer)
-
-    end_drawer = ft.NavigationDrawer(
-        on_dismiss=end_drawer_dismissed,
-        controls=[
-            ft.NavigationDrawerDestination(
-                icon=ft.icons.ADD_TO_HOME_SCREEN_SHARP, label="Item 1"
-            ),
-            ft.NavigationDrawerDestination(icon=ft.icons.ADD_COMMENT, label="Item 2"),
-        ],
-    )
 
 
     get_directory_dialog = FilePicker(on_result=get_directory_result)
@@ -91,13 +96,13 @@ def main(page: Page):
     table=DataTable()
 
     page.add(get_directory_dialog)
-    page.add(ft.ElevatedButton("Show end drawer", on_click=show_end_drawer))
+    page.add(Row([
+        ElevatedButton("Обновить таблицу", on_click=(classes),icon="UPDATE"),
+        ElevatedButton("Данные по классу",icon="LIST"),
+        ElevatedButton("Данные по школе",icon="LIST")]))
 
-    #page.add(Row([
-        #ft.ExpansionTile(title=Text("Список классов"),width=300, controls=[ft.FilledButton(content=Text('10И'),width=300)]),
-        #ft.ExpansionTile(title=Text("Список учеников"),width=300, controls=[ft.FilledButton(content=Text("Алексей Панферов"),width=300)])]))
-    
-    
+    page.add(Row([
+        ft.ExpansionTile(title=Text("Список учеников"),width=300, controls=[ft.CupertinoButton(content=Text("Алексей Панферов"),width=300)])]))
 
 
     page.scroll = True
